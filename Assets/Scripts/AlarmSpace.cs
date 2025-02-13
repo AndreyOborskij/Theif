@@ -3,16 +3,22 @@ using UnityEngine;
 
 public class AlarmSpace : MonoBehaviour
 {
-    public Action Came;
-    public Action WentOut;
+    public Action ThiefCame;
+    public Action ThiefWentOut;
 
     private void OnTriggerEnter(Collider other)
     {
-        Came?.Invoke();
+        if (other.CompareTag("Thief"))
+        { 
+            ThiefCame?.Invoke();
+        }
     }
-    
+
     private void OnTriggerExit(Collider other)
     {
-        WentOut?.Invoke();
+        if (other.CompareTag("Thief"))
+        {
+            ThiefWentOut?.Invoke();
+        }
     }
 }
