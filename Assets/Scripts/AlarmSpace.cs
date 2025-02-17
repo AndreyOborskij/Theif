@@ -8,7 +8,7 @@ public class AlarmSpace : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Thief"))
+        if (other.gameObject.TryGetComponent(out Thief thief))
         { 
             ThiefCame?.Invoke();
         }
@@ -16,7 +16,7 @@ public class AlarmSpace : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Thief"))
+        if (other.gameObject.TryGetComponent(out Thief thief))
         {
             ThiefWentOut?.Invoke();
         }

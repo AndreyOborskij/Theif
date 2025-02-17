@@ -30,34 +30,39 @@ public class Alarm : MonoBehaviour
 
     private void IncreaseVolume()
     {
-        if (_volumeCoroutine != null)
-        {
-            StopCoroutine(_volumeCoroutine);
-        }
-
+        ControlVolume(_maxVolume);
+        
         _audio.Play();
-        _volumeCoroutine = StartCoroutine(ChangeVolume(_maxVolume));
     }
 
     private void DecreaseVolume()
     {
-        if (_volumeCoroutine != null)
-        {
-            StopCoroutine(_volumeCoroutine);
-        }
-
-        _volumeCoroutine = StartCoroutine(ChangeVolume(_minVolume, _audio));
+        ControlVolume(_minVolume);
     }
 
-    private IEnumerator ChangeVolume(float targetVolume, AudioSource audio = null)
+    private IEnumerator ChangeVolume(float targetVolume)
     {
-        while (!Mathf.Approximately(_audio.volume, targetVolume))
+        while (Mathf.Approximately(_audio.volume, targetVolume) == false)
         {
             _audio.volume = Mathf.MoveTowards(_audio.volume, targetVolume, _fadeSpeed * Time.deltaTime);
 
             yield return null;
         }
 
-        audio.Stop();
+        if (_audio.volume == _minVolume)
+        {
+            Debug.Log("Выкл");
+            _audio.Stop();
+        }
+    }
+
+    private void ControlVolume(float targetVolume)
+    {
+        if (_volumeCoroutine != null)
+        {
+            StopCoroutine(_volumeCoroutine);
+        }
+
+        _volumeCoroutine = StartCoroutine(ChangeVolume(targetVolume));
     }
 }
